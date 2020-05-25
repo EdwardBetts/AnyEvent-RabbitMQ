@@ -1,7 +1,46 @@
 on: [push, pull_request]
 
 jobs:
-  integration-test:
+  integration-test-activemq-artemis:
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ['ubuntu-latest']
+        perl: [ '5.30', '5.28', '5.10' ]
+      max-parallel: 2
+    name: Integration test ${{ matrix.perl }} on ${{ matrix.os }}
+
+    services:
+      rabbitmq:
+        image: apache/activemq-artemis:latest
+        env:
+          ARTEMIS_USER: guest
+          ARTEMIS_PASSWORD: guest
+        ports:
+          - 5672:5672/tcp
+
+    steps:
+      - name: Grab release tarball
+        uses: actions/download-artifact@v1
+        with:
+          name: release-tarball
+      - run: tar xzf release-tarball/AnyEvent-RabbitMQ-*.tar.gz --strip 1
+      - run: rm -rf release-tarball
+      - name: Set up perl
+        uses: shogo82148/actions-setup-perl@v1.3.1
+        with:
+          perl-version: ${{ matrix.perl }}
+      - run: perl -V
+      - run: cpanm --quiet --notest --installdeps --with-recommends --with-develop .
+      - run: perl Makefile.PL
+      - run: make
+      - run: AUTHOR_TESTING=1 make test
+      - run: prove -Iblib/lib -r xt/
+
+
+
+  integration-test-rabbitmq:
     needs: build
     runs-on: ${{ matrix.os }}
     strategy:
