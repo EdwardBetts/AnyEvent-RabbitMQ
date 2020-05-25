@@ -9,11 +9,11 @@ jobs:
         os: ['ubuntu-latest']
         perl: [ '5.30', '5.28', '5.10' ]
       max-parallel: 2
-    name: Integration test ${{ matrix.perl }} on ${{ matrix.os }}
+    name: ActiveMQ Artemis Integration test ${{ matrix.perl }} on ${{ matrix.os }}
 
     services:
       rabbitmq:
-        image: apache/activemq-artemis:latest
+        image: apache/activemq-artemis
         env:
           ARTEMIS_USER: guest
           ARTEMIS_PASSWORD: guest
@@ -48,7 +48,7 @@ jobs:
         os: ['ubuntu-latest']
         perl: [ '5.30', '5.28', '5.10' ]
       max-parallel: 2
-    name: Integration test ${{ matrix.perl }} on ${{ matrix.os }}
+    name: RabbitMQ Integration test ${{ matrix.perl }} on ${{ matrix.os }}
 
     services:
       rabbitmq:
