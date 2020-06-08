@@ -46,7 +46,6 @@ jobs:
         perl: [ '5.30', '5.28', '5.10' ]
       max-parallel: 3
     name: Perl unit tests ${{ matrix.perl }} on ${{ matrix.os }}
-    shell: bash
 
     steps:
       - name: Grab release tarball
@@ -54,7 +53,6 @@ jobs:
         with:
           name: release-tarball
       - run: tar xzf release-tarball/ar.tar.gz --strip 1
-      - run: rm -rf release-tarball
       - name: Set up perl
         uses: shogo82148/actions-setup-perl@v1.3.1
         with:
