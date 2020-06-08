@@ -46,6 +46,7 @@ jobs:
         perl: [ '5.30', '5.28', '5.10' ]
       max-parallel: 3
     name: Perl unit tests ${{ matrix.perl }} on ${{ matrix.os }}
+    shell: bash
 
     steps:
       - name: Grab release tarball
