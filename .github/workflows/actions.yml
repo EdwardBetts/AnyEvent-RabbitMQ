@@ -25,7 +25,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: release-tarball
-      - run: tar xzf release-tarball/AnyEvent-RabbitMQ-*.tar.gz --strip 1
+      - run: tar xzf release-tarball/ar.tar.gz --strip 1
       - run: rm -rf release-tarball
       - name: Set up perl
         uses: shogo82148/actions-setup-perl@v1.3.1
@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: release-tarball
-      - run: tar xzf release-tarball/AnyEvent-RabbitMQ-*.tar.gz --strip 1
+      - run: tar xzf release-tarball/ar.tar.gz --strip 1
       - run: rm -rf release-tarball
       - name: Set up perl
         uses: shogo82148/actions-setup-perl@v1.3.1
@@ -83,7 +83,8 @@ jobs:
       - run: cpanm --quiet --notest Dist::Zilla
       - run: dzil authordeps | cpanm --quiet
       - run: dzil build
+      - run: mv AnyEvent-RabbitMQ-*.tar.gz ar.tar.gz
       - uses: actions/upload-artifact@v2
         with:
-          path: AnyEvent-RabbitMQ-*.tar.gz
+          path: ar.tar.gz
           name: release-tarball
