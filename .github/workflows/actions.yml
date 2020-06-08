@@ -80,7 +80,7 @@ jobs:
           perl-version: ${{ matrix.perl }}
       - run: perl -V
       - run: cpanm --quiet --notest Dist::Zilla
-      - run: dzil authordeps | cpanm --quiet
+      - run: dzil authordeps | cpanm --quiet -notest
       - run: dzil build
       - run: mv AnyEvent-RabbitMQ-*.tar.gz ar.tar.gz
       - uses: actions/upload-artifact@v2
