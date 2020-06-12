@@ -88,6 +88,28 @@ jobs:
       - run: make
       - run: make test
 
+  activeperl-unit-test:
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ['windows-latest']
+      max-parallel: 3
+    name: ActivePerl unit tests on ${{ matrix.os }}
+
+    steps:
+      - name: Grab release tarball
+        uses: actions/download-artifact@v1
+        with:
+          name: release-tarball
+      - run: tar xzf release-tarball/ar.tar.gz --strip 1
+      - run: choco install activeperl
+      - run: perl -V
+      - run: cpanm --quiet --notest --installdeps .
+      - run: perl Makefile.PL
+      - run: make
+      - run: make test
+
   build:
     runs-on: ${{ matrix.os }}
     strategy:
