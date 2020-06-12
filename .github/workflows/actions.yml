@@ -69,7 +69,7 @@ jobs:
     strategy:
       matrix:
         os: ['windows-latest']
-        perl: [ '5.30.2.1', '5.14.2.1' ]
+        perl: [ '5.30.2.1', '5.14.4.1' ]
         arch: ['32bit', '64bit']
       max-parallel: 3
     name: Strawberry Perl unit tests on ${{ matrix.os }} with ${{ matrix.arch }} perl ${{ matrix.perl }}
