@@ -69,8 +69,10 @@ jobs:
     strategy:
       matrix:
         os: ['windows-latest']
+        perl: [ '5.30.2.1', '5.14.2.1' ]
+        arch: ['32bit', '64bit']
       max-parallel: 3
-    name: Perl unit tests on ${{ matrix.os }}
+    name: Strawberry Perl unit tests on ${{ matrix.os }} with ${{ matrix.arch }} perl ${{ matrix.perl }}
 
     steps:
       - name: Grab release tarball
@@ -78,8 +80,8 @@ jobs:
         with:
           name: release-tarball
       - run: tar xzf release-tarball/ar.tar.gz --strip 1
-      - run: Invoke-WebRequest -Uri http://strawberryperl.com/download/5.30.2.1/strawberry-perl-5.30.2.1-64bit.msi -OutFile c:\strawberry-perl-5.30.2.1-64bit.msi
-      - run: Start-Process msiexec.exe -Wait -ArgumentList '/I C:\strawberry-perl-5.30.2.1-64bit.msi /quiet'
+      - run: Invoke-WebRequest -Uri http://strawberryperl.com/download/${{ matrix.perl }}/strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi -OutFile c:\strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi
+      - run: Start-Process msiexec.exe -Wait -ArgumentList '/I C:\strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi /quiet'
       - run: perl -V
       - run: cpanm --verbose --notest --installdeps .
       - run: perl Makefile.PL
