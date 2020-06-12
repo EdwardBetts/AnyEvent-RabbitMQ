@@ -70,7 +70,7 @@ jobs:
       matrix:
         os: ['windows-latest']
         perl: [ '5.30.2.1', '5.28.2.1' ]
-        arch: ['32bit', '64bit']
+        arch: ['64bit']
       max-parallel: 3
     name: Strawberry Perl unit tests on ${{ matrix.os }} with ${{ matrix.arch }} perl ${{ matrix.perl }}
 
