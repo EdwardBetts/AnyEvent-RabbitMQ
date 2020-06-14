@@ -104,9 +104,10 @@ jobs:
           name: release-tarball
       - run: tar xzf release-tarball/ar.tar.gz --strip 1
       - run: choco install activeperl
-      - run: Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH -Value c:\perl64/bin
+      - run: Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH -Value c:\perl64\bin
       - run: refreshenv
       - run: perl -V
+      - run: perl.exe -V
       - run: cpanm --quiet --notest --installdeps .
       - run: perl Makefile.PL
       - run: make
