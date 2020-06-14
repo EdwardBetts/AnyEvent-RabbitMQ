@@ -108,7 +108,7 @@ jobs:
       - run: refreshenv
       - run: dir c:\perl64
       - run: dir c:\perl64\bin
-      - run: echo $PATH
+      - run: echo @PATH
       - run: perl -V
       - run: perl.exe -V
       - run: cpanm --quiet --notest --installdeps .
