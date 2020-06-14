@@ -104,6 +104,7 @@ jobs:
           name: release-tarball
       - run: tar xzf release-tarball/ar.tar.gz --strip 1
       - run: choco install activeperl
+      - run: refreshenv
       - run: perl -V
       - run: cpanm --quiet --notest --installdeps .
       - run: perl Makefile.PL
