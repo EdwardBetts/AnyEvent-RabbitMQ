@@ -81,7 +81,11 @@ jobs:
           name: release-tarball
       - run: tar xzf release-tarball/ar.tar.gz --strip 1
       - run: Invoke-WebRequest -Uri http://strawberryperl.com/download/${{ matrix.perl }}/strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi -OutFile c:\strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi
-      - run: Start-Process msiexec.exe -Wait -ArgumentList '/I C:\strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi /quiet'
+      - run: Start-Process msiexec.exe -Wait -ArgumentList '/I C:\strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi /quiet /L*V "C:\strawberry.log"'
+      - uses: actions/upload-artifact@v2
+        with:
+          path: c:\strawberry.log
+          name: strawberry
       - run: perl -V
       - run: cpanm --quiet --notest --installdeps .
       - run: perl Makefile.PL
