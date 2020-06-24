@@ -28,7 +28,7 @@ jobs:
       - run: tar xzf release-tarball/ar.tar.gz --strip 1
       - run: rm -rf release-tarball
       - name: Set up perl
-        uses: shogo82148/actions-setup-perl@v1.4.0
+        uses: shogo82148/actions-setup-perl@v1.6.0
         with:
           perl-version: ${{ matrix.perl }}
       - run: perl -V
@@ -37,6 +37,34 @@ jobs:
       - run: make
       - run: AUTHOR_TESTING=1 make test
       - run: prove -Iblib/lib -r xt/
+
+  unit-test-strawberry:
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ['windows-latest']
+        perl: [ '5.30', '5.28' ]
+      max-parallel: 3
+    name: Perl unit tests ${{ matrix.perl }} on ${{ matrix.os }}
+
+    steps:
+      - name: Grab release tarball
+        uses: actions/download-artifact@v1
+        with:
+          name: release-tarball
+      - run: tar xzf release-tarball/ar.tar.gz --strip 1
+      - name: Set up perl
+        uses: shogo82148/actions-setup-perl@v1.6.0
+        with:
+          perl-version: ${{ matrix.perl }}
+          distribution: strawberry
+      - run: perl -V
+      - run: cpanm --quiet --notest --installdeps .
+      - run: perl Makefile.PL
+      - run: make
+      - run: make test
+
   unit-test:
     needs: build
     runs-on: ${{ matrix.os }}
@@ -54,66 +82,10 @@ jobs:
           name: release-tarball
       - run: tar xzf release-tarball/ar.tar.gz --strip 1
       - name: Set up perl
-        uses: shogo82148/actions-setup-perl@v1.4.0
+        uses: shogo82148/actions-setup-perl@v1.6.0
         with:
           perl-version: ${{ matrix.perl }}
       - run: perl -V
-      - run: cpanm --quiet --notest --installdeps .
-      - run: perl Makefile.PL
-      - run: make
-      - run: make test
-
-  strawberry-unit-test:
-    needs: build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: ['windows-latest']
-        perl: [ '5.30.2.1', '5.28.2.1' ]
-        arch: ['64bit']
-      max-parallel: 3
-    name: Strawberry Perl unit tests on ${{ matrix.os }} with ${{ matrix.arch }} perl ${{ matrix.perl }}
-
-    steps:
-      - name: Grab release tarball
-        uses: actions/download-artifact@v1
-        with:
-          name: release-tarball
-      - run: tar xzf release-tarball/ar.tar.gz --strip 1
-      - run: Invoke-WebRequest -Uri http://strawberryperl.com/download/${{ matrix.perl }}/strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi -OutFile c:\strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi
-      - run: Start-Process msiexec.exe -Wait -ArgumentList '/I C:\strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi /quiet /L*V "C:\strawberry.log"'
-      - uses: actions/upload-artifact@v2
-        with:
-          path: c:\strawberry.log
-          name: strawberry
-      - run: perl -V
-      - run: cpanm --quiet --notest --installdeps .
-      - run: perl Makefile.PL
-      - run: make
-      - run: make test
-
-  activeperl-unit-test:
-    needs: build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: ['windows-latest']
-      max-parallel: 3
-    name: ActivePerl unit tests on ${{ matrix.os }}
-
-    steps:
-      - name: Grab release tarball
-        uses: actions/download-artifact@v1
-        with:
-          name: release-tarball
-      - run: tar xzf release-tarball/ar.tar.gz --strip 1
-      - run: choco install activeperl
-      - run: $ENV:PATH="c:\perl64\bin;$ENV:PATH"
-      - run: dir c:\perl64
-      - run: dir c:\perl64\bin
-      - run: $Env:Path
-      - run: perl -V
-      - run: perl.exe -V
       - run: cpanm --quiet --notest --installdeps .
       - run: perl Makefile.PL
       - run: make
@@ -131,7 +103,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up perl
-        uses: shogo82148/actions-setup-perl@v1.4.0
+        uses: shogo82148/actions-setup-perl@v1.6.0
         with:
           perl-version: ${{ matrix.perl }}
       - run: perl -V
