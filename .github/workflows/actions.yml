@@ -28,7 +28,7 @@ jobs:
       - run: tar xzf release-tarball/ar.tar.gz --strip 1
       - run: rm -rf release-tarball
       - name: Set up perl
-        uses: shogo82148/actions-setup-perl@v1.4.0
+        uses: shogo82148/actions-setup-perl@v1.6.0
         with:
           perl-version: ${{ matrix.perl }}
       - run: perl -V
@@ -54,7 +54,7 @@ jobs:
           name: release-tarball
       - run: tar xzf release-tarball/ar.tar.gz --strip 1
       - name: Set up perl
-        uses: shogo82148/actions-setup-perl@v1.4.0
+        uses: shogo82148/actions-setup-perl@v1.6.0
         with:
           perl-version: ${{ matrix.perl }}
       - run: perl -V
@@ -80,8 +80,11 @@ jobs:
         with:
           name: release-tarball
       - run: tar xzf release-tarball/ar.tar.gz --strip 1
-      - run: Invoke-WebRequest -Uri http://strawberryperl.com/download/${{ matrix.perl }}/strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi -OutFile c:\strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi
-      - run: Start-Process msiexec.exe -Wait -ArgumentList '/I C:\strawberry-perl-${{ matrix.perl }}-${{ matrix.arch }}.msi /quiet'
+      - name: Set up perl
+        uses: shogo82148/actions-setup-perl@v1.6.0
+        with:
+          perl-version: ${{ matrix.perl }}
+          distribution: strawberry
       - run: perl -V
       - run: cpanm --quiet --notest --installdeps .
       - run: perl Makefile.PL
@@ -100,7 +103,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up perl
-        uses: shogo82148/actions-setup-perl@v1.4.0
+        uses: shogo82148/actions-setup-perl@v1.6.0
         with:
           perl-version: ${{ matrix.perl }}
       - run: perl -V
