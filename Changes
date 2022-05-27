@@ -129,7 +129,7 @@ Revision history for Perl extension AnyEvent::RabbitMQ
           never being terminated (as there were still channels associated
           with it).
 
-        - Stop leaking all RabbitMQ messages recieved back inside
+        - Stop leaking all RabbitMQ messages received back inside
           a closure.
 
         - Allow multiple clients to have independent connections

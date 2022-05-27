@@ -109,7 +109,7 @@ sub close {
         or return;
     my %args = $connection->_set_cbs(@_);
 
-    # If open in in progess, wait for it; 1s arbitrary timing.
+    # If open in in progress, wait for it; 1s arbitrary timing.
 
     weaken(my $wself = $self);
     my $t; $t = AE::timer 0, 1, sub {
@@ -167,7 +167,7 @@ sub _closed {
     # Fake nacks of all outstanding publishes
     $_->($frame) for grep { defined } map { $_->[1] } values %{ $self->{_publish_cbs} };
 
-    # Report cancelation of all outstanding consumes
+    # Report cancellation of all outstanding consumes
     my @tags = keys %{ $self->{_consumer_cbs} };
     $self->_canceled($_, $frame) for @tags;
 
